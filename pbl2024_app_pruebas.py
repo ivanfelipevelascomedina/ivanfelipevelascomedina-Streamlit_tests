@@ -9,6 +9,7 @@ from openai import OpenAI
 import requests
 import time
 import os
+os.system("apt-get update && apt-get install -y imagemagick")
 import re
 import random
 from lumaai import LumaAI
@@ -191,7 +192,7 @@ def parse_prompts_voice(summary):
 def generate_voice_segment(prompt):
     response = Resemble.v2.clips.create_sync(project_uuid, voice_uuid, prompt)
     file_name = f"voice_{int(time.time())}.mp3"
-    st.write("API Response:", response)
+    #st.write("API Response:", response)
     audio_src = response['item'].get('audio_src')
     if audio_src:
         audio_data = requests.get(audio_src).content
@@ -232,7 +233,7 @@ def generate_video_segment(prompt, number, prompt_image=None):
             st.write("Dreaming")
             time.sleep(5)
         number = number - 1
-        st.write(ids)
+        #st.write(ids)
 
     # List to keep track of downloaded files
     downloaded_files = []
@@ -336,8 +337,8 @@ def main():
     # Input section
     query = st.text_input("Enter your query (e.g., 'World War II in Japan'):", "")
     option = st.radio("Choose data source:", ["news", "papers"])
-    num_needed = st.slider("Amount of papers/news you want to fetch (how much context do you want to give to the video):", 3, 5, 10)
-    scenes_needed = st.slider("Enter the amount of scenes you want the video to have:", 1, 3, 5, 10)
+    num_needed = st.slider("Amount of papers/news you want to fetch (how much context do you want to give to the video):", 0, 5, 10)
+    scenes_needed = st.slider("Enter the amount of scenes you want the video to have:", 1, 5, 10)
     word_limit = 15
     
     if st.button("Fetch Data"):
