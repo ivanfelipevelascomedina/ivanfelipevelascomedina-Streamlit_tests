@@ -42,6 +42,8 @@ else:
 if resemble_key:
     from resemble import Resemble
     Resemble.api_key(resemble_key)
+    project_uuid = Resemble.v2.projects.all(1, 10)['items'][0]['uuid']
+    voice_uuid = '0842fdf9'
 else:
     st.error("Please provide your Resemble API key.")
 
