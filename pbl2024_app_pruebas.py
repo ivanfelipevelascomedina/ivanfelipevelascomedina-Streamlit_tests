@@ -1,6 +1,7 @@
 import subprocess
 import streamlit as st
 from moviepy.config import change_settings
+change_settings({"IMAGEMAGICK_BINARY": "C:\\Program Files\\ImageMagick-7.1.1-Q16-HDRI\\magick.exe"})
 import os
 
 # Check if ImageMagick is installed
