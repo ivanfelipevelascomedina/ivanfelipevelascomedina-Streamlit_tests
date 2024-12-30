@@ -1,6 +1,7 @@
 import subprocess
 import streamlit as st
 from moviepy.config import change_settings
+import os
 
 # Check if ImageMagick is installed
 def check_imagemagick():
@@ -28,6 +29,7 @@ def check_ffmpeg():
 
 # Main Streamlit app
 def main():
+    os.environ["IMAGEMAGICK_BINARY"] = "/usr/bin/magick"
     st.title("Streamlit Troubleshooting")
 
     # Check ImageMagick
