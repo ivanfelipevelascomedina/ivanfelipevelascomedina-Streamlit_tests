@@ -93,10 +93,6 @@ def main():
             zip_ref.extractall(".")
     
         os.remove(zip_path)
-
-# Set the binary path for MoviePy
-imagemagick_path = os.path.join(os.getcwd(), "ImageMagick-7.1.1-Q16-HDRI", "magick.exe")
-change_settings({"IMAGEMAGICK_BINARY": imagemagick_path})
     
     ## Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
