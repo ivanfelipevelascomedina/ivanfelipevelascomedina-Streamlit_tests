@@ -24,6 +24,7 @@ import cv2
 import numpy as np
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_merge_video_audio
+import tempfile
 
 # Function to add music to a video
 def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
@@ -154,29 +155,39 @@ def main():
     try:
         processed_videos = []
         for i, (video, audio, subtitle) in enumerate(zip(video_files, voice_files, narrators)):
-            subtitle_file = f"processed_video_{i}.mp4"
-            process_video_with_subtitles(video, [subtitle], subtitle_file)
-            if os.path.exists(subtitle_file):
+            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_video:
+                subtitle_file = temp_video.name
+                st.write(f"Processing video: {video}, audio: {audio}, subtitle: {subtitle}")
+                process_video_with_subtitles(video, [subtitle], subtitle_file)
                 processed_videos.append(subtitle_file)
-            else:
-                st.write(f"Subtitle video creation failed for {subtitle_file}")
-    
+        
         if not processed_videos:
             st.write("No processed videos available.")
             return
-        # Combine video and audio
-        final_video_with_audio = "final_video_with_audio.mp4"
-        combine_video_and_audio(processed_videos[0], voice_files[0], final_video_with_audio)
+    
+        # Combine the first processed video with audio
+        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_audio_video:
+            final_video_with_audio = temp_audio_video.name
+            st.write(f"Combining video: {processed_videos[0]} with audio: {voice_files[0]} into {final_video_with_audio}")
+            combine_video_and_audio(processed_videos[0], voice_files[0], final_video_with_audio)
+        
         if not os.path.exists(final_video_with_audio):
             st.write("Failed to create the combined video with audio.")
             return
-            
-        ## Need to save the music somewhere
-        combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_with_audio.mp4")
-        st.write(f"Final video created: {combined_video}")
-        combined_video_file = open(combined_video, "rb")
-        combined_video_bytes = combined_video_file.read()
-        st.video(combined_video_bytes)  # Display the video in the app
+    
+        # Add background music
+        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_final_video:
+            combined_video = temp_final_video.name
+            combined_video = add_BGM(music, final_video_with_audio, output_file=combined_video)
+        
+            st.write(f"Final video created: {combined_video}")
+            with open(combined_video, "rb") as combined_video_file:
+                combined_video_bytes = combined_video_file.read()
+                st.video(combined_video_bytes)
+    
+    except Exception as e:
+        st.write(f"Error combining video and voice segments: {e}")
+
 
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
@@ -190,7 +201,6 @@ def main():
                 file_name="combined_video.mp4",
                 mime="video/mp4"
             )
-
 
 if __name__ == "__main__":
     main()
