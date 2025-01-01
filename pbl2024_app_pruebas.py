@@ -20,6 +20,10 @@ import subprocess
 import textwrap
 import streamlit as st
 from moviepy.config import change_settings
+import cv2
+import numpy as np
+from moviepy.audio.io.AudioFileClip import AudioFileClip
+from moviepy.video.io.ffmpeg_tools import ffmpeg_merge_video_audio
 
 # Function to add music to a video
 def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
@@ -47,54 +51,47 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
 
     return output_file
 
-# Function to add subtitles
-def annotate(clip, txt, txt_color='white', fontsize=50, font='Helvetica-Bold', max_width=1):
-    max_width_px = clip.size[0] * max_width
-    # Wrap the text into multiple lines based on the max width
-    wrapped_text = textwrap.fill(txt, width=50)  # 50 characters per line as an example, adjust based on actual font
-    txtclip = editor.TextClip(wrapped_text, fontsize=fontsize, font=font, color=txt_color, stroke_color='black', stroke_width=1)
-    # Composite the text on top of the video clip
-    cvc = editor.CompositeVideoClip([clip, txtclip.set_pos(('center', 'bottom'))])
+# Function to add subtitles using OpenCV
+def annotate_frame(frame, text, position=(50, 50), font_scale=1, color=(255, 255, 255), thickness=2):
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    wrapped_text = text.split('\n')  # Split text into lines for wrapping
+    y_offset = position[1]
+    for line in wrapped_text:
+        cv2.putText(frame, line, (position[0], y_offset), font, font_scale, color, thickness, lineType=cv2.LINE_AA)
+        y_offset += 30  # Line spacing
+    return frame
 
-    return cvc.set_duration(clip.duration)
+# Function to process video with subtitles
+def process_video_with_subtitles(video_file, subtitles, output_file):
+    cap = cv2.VideoCapture(video_file)
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
 
-# Function to combine video, voice and subtitles
-def combine_segments(video_files, voice_files, subtitles):
-    clips = []
-    # Create VideoFileClip objects for the video files
-    video_clips = [VideoFileClip(video) for video in video_files]
+    frame_count = 0
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+        # Annotate the frame with subtitles
+        text = subtitles[min(frame_count // fps, len(subtitles) - 1)]  # Choose subtitle based on time
+        frame = annotate_frame(frame, text, position=(50, height - 50))
+        out.write(frame)
+        frame_count += 1
 
-    # Combine video and audio
-    for video_clip, audio, subtitle in zip(video_clips, voice_files, subtitles):
-        audio_clip = AudioFileClip(audio)
-        video_clip = video_clip.set_audio(audio_clip)
-        video_clip = annotate(video_clip, subtitle)
-        clips.append(video_clip)
+    cap.release()
+    out.release()
 
-    # Concatenate video clips
-    combined_video = concatenate_videoclips(clips)
-
-    # Output file
-    output_file = "final_video.mp4"
-    combined_video.write_videofile(output_file, codec="libx264", audio_codec="aac")
-
-    return output_file
+# Function to combine video and audio
+def combine_video_and_audio(video_file, audio_file, output_file):
+    ffmpeg_merge_video_audio(video_file, audio_file, output_file, vcodec="libx264", acodec="aac")
 
 # Main program
 def main():
-    # Download ImageMagick if not already present
-    if not os.path.exists("ImageMagick-7.1.1-Q16-HDRI"):
-        url = "https://download.imagemagick.org/ImageMagick/download/binaries/ImageMagick-7.1.1-Q16-HDRI.zip"
-        zip_path = "imagemagick.zip"
-        urllib.request.urlretrieve(url, zip_path)
-    
-        # Extract the binary
-        with ZipFile(zip_path, "r") as zip_ref:
-            zip_ref.extractall(".")
-    
-        os.remove(zip_path)
-    
-    ## Define music, video and subtitles
+   
+    # Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
     video_files = [
