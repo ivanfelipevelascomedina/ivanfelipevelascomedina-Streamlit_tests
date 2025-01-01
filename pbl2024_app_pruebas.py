@@ -168,6 +168,27 @@ def main():
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
 
+    # Combine the segments
+    video_files_2 = [
+        "video_1.mp4", "video_2.mp4", "video_3.mp4",
+        "video_4.mp4", "video_5.mp4", "video_6.mp4",
+        "final_vide0.map4"
+    ]
+    voice_files_2 = [
+        "voice_1.mp3", "voice_2.mp3", "voice_3.mp3",
+        "voice_4.mp3", "voice_5.mp3", "voice_6.mp3",
+        "voice_1"
+    ]
+    narrators_2 = ["Welcome to the story.", "Once upon a time, in a distant land...", "This is how it begins.", "4", "5", "6","7"]
+    try:
+        final_video_2 = combine_segments(video_files_2, voice_files_2, narrators_2)
+        ## Need to save the music somewhere
+        final_video_2 = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_2.mp4")
+        st.write(f"Final video 2 created: {final_video_2}")
+        st.video(final_video_2)  # Display the video in the app
+    except Exception as e:
+        st.write(f"Error combining video and voice segments: {e}")
+
 if __name__ == "__main__":
     main()
 
