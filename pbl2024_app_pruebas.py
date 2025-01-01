@@ -162,7 +162,7 @@ def main():
         final_video = combine_segments(video_files_1, voice_files_1, narrators_1)
         ## Need to save the music somewhere
         final_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
-        st.write(f"Final video 1 created: {final_video}")
+        st.write(f"Final video created: {final_video}")
         st.video(final_video)  # Display the video in the app
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
@@ -176,13 +176,6 @@ def main():
         st.video(final_video_1)  # Display the video in the app
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
-
-    st.write(f"Current working directory: {os.getcwd()}")
-    st.write(f"Absolute path for 'final_video.mp4': {os.path.abspath('final_video.mp4')}")
-    st.write(f"Does 'final_video.mp4' exist? {os.path.exists('final_video.mp4')}")
-    
-    st.write(f"Absolute path for 'final_video_1.mp4': {os.path.abspath('final_video_1.mp4')}")
-    st.write(f"Does 'final_video_1.mp4' exist? {os.path.exists('final_video_1.mp4')}")
 
     # Combine the segments
     video_files_2 = [
