@@ -159,7 +159,7 @@ def main():
             processed_videos.append(subtitle_file)
         
         final_video = "final_video_with_audio.mp4"
-        combine_video_and_audio(processed_videos[0], audio_files[0], combined_video)
+        combine_video_and_audio(processed_videos[0], voice_files[0], combined_video)
         ## Need to save the music somewhere
         combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
         st.write(f"Final video created: {combined_video}")
