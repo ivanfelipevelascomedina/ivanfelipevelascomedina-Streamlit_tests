@@ -20,7 +20,6 @@ import subprocess
 import textwrap
 import streamlit as st
 from moviepy.config import change_settings
-change_settings({"IMAGEMAGICK_BINARY": "ImageMagick-7.1.1-Q16-HDRI\\magick.exe"})
 
 # Function to add music to a video
 def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
@@ -83,6 +82,9 @@ def combine_segments(video_files, voice_files, subtitles):
 
 # Main program
 def main():
+    # Specify the path to ImageMagick binary
+    imagemagick_path = os.path.join("ImageMagick-7.1.1-Q16-HDRI", "magick.exe")
+    change_settings({"IMAGEMAGICK_BINARY": imagemagick_path})
     
     ## Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
