@@ -152,7 +152,14 @@ def main():
 
     # Combine the text, music and video segments
     try:
-        combined_video = combine_segments(video_files, voice_files, narrators)
+        processed_videos = []
+        for i, (video, audio, subtitle) in enumerate(zip(video_files, audio_files, subtitles)):
+            subtitle_file = f"processed_video_{i}.mp4"
+            process_video_with_subtitles(video, [subtitle], subtitle_file)
+            processed_videos.append(subtitle_file)
+        
+        final_video = "final_video_with_audio.mp4"
+        combine_video_and_audio(processed_videos[0], audio_files[0], combined_video)
         ## Need to save the music somewhere
         combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
         st.write(f"Final video created: {combined_video}")
