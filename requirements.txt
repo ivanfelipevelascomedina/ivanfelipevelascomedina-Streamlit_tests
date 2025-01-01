@@ -9,3 +9,4 @@ lumaai==1.2.2
 pydub==0.25.1
 numpy
 imageio[ffmpeg]
+cv2
