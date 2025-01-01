@@ -82,8 +82,14 @@ def combine_segments(video_files, voice_files, subtitles):
 
 # Main program
 def main():
-    # Specify the path to ImageMagick binary
-    change_settings({"IMAGEMAGICK_BINARY": "magick.exe"})
+    # Get the current working directory (where the app is running)
+    current_dir = os.getcwd()
+    
+    # Construct the path to ImageMagick binary
+    imagemagick_path = os.path.join(current_dir, "ImageMagick-7.1.1-Q16-HDRI", "magick.exe")
+    
+    # Configure MoviePy to use this binary
+    change_settings({"IMAGEMAGICK_BINARY": imagemagick_path})
     
     ## Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
