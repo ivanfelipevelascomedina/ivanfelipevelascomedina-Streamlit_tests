@@ -62,32 +62,33 @@ def annotate_frame(frame, text, position=(50, 50), font_scale=1, color=(255, 255
         y_offset += 30  # Line spacing
     return frame
 
-# Function to process video with subtitles
-def process_video_with_subtitles(video_file, subtitles, output_file):
-    cap = cv2.VideoCapture(video_file)
-    fps = int(cap.get(cv2.CAP_PROP_FPS))
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
+# Function to create temporary directories for video processing
+def create_temp_dir():
+    return tempfile.mkdtemp(suffix=None, prefix="SMW_", dir=None)
 
-    frame_count = 0
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            break
-        # Annotate the frame with subtitles
-        text = subtitles[min(frame_count // fps, len(subtitles) - 1)]  # Choose subtitle based on time
-        frame = annotate_frame(frame, text, position=(50, height - 50))
-        out.write(frame)
-        frame_count += 1
+# Function to process videos with subtitles and output to temporary files
+def process_videos_with_subtitles(video_files, subtitles, temp_dir):
+    processed_videos = []
+    for i, (video, subtitle) in enumerate(zip(video_files, subtitles)):
+        subtitle_file = os.path.join(temp_dir, f"processed_video_{i}.mp4")
+        process_video_with_subtitles(video, [subtitle], subtitle_file)
+        if os.path.exists(subtitle_file):
+            processed_videos.append(subtitle_file)
+        else:
+            st.write(f"Subtitle video creation failed for {subtitle_file}")
+    return processed_videos
 
-    cap.release()
-    out.release()
-
-# Function to combine video and audio
-def combine_video_and_audio(video_file, audio_file, output_file):
-    ffmpeg_merge_video_audio(video_file, audio_file, output_file, vcodec="libx264", acodec="aac")
+# Function to combine video and audio files
+def combine_videos_and_audio(processed_videos, voice_files, temp_dir):
+    combined_videos = []
+    for i, (video, audio) in enumerate(zip(processed_videos, voice_files)):
+        combined_file = os.path.join(temp_dir, f"combined_video_{i}.mp4")
+        combine_video_and_audio(video, audio, combined_file)
+        if os.path.exists(combined_file):
+            combined_videos.append(combined_file)
+        else:
+            st.write(f"Failed to create combined video for {combined_file}")
+    return combined_videos
 
 # Main program
 def main():
@@ -109,7 +110,7 @@ def main():
     video_file = open(video, "rb")
     video_bytes = video_file.read()
     st.video(video_bytes)  # Display the video in the app
-
+"""
     # Allow users to download the music
     if os.path.exists(music):
         with open(music, "rb") as file:
@@ -150,57 +151,54 @@ def main():
                 file_name="music_video.mp4",
                 mime="video/mp4"
             )
+"""
 
-    # Combine the text, music and video segments
+    # Create a temporary directory
+    temp_dir = create_temp_dir()
+
     try:
-        processed_videos = []
-        for i, (video, audio, subtitle) in enumerate(zip(video_files, voice_files, narrators)):
-            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_video:
-                subtitle_file = temp_video.name
-                st.write(f"Processing video: {video}, audio: {audio}, subtitle: {subtitle}")
-                process_video_with_subtitles(video, [subtitle], subtitle_file)
-                processed_videos.append(subtitle_file)
-        
+        # Process videos with subtitles
+        processed_videos = process_videos_with_subtitles(video_files, narrators, temp_dir)
         if not processed_videos:
             st.write("No processed videos available.")
             return
-    
-        # Combine the first processed video with audio
-        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_audio_video:
-            final_video_with_audio = temp_audio_video.name
-            st.write(f"Combining video: {processed_videos[0]} with audio: {voice_files[0]} into {final_video_with_audio}")
-            combine_video_and_audio(processed_videos[0], voice_files[0], final_video_with_audio)
-        
-        if not os.path.exists(final_video_with_audio):
-            st.write("Failed to create the combined video with audio.")
+
+        # Combine videos and audio
+        combined_videos = combine_videos_and_audio(processed_videos, voice_files, temp_dir)
+        if not combined_videos:
+            st.write("Failed to create combined videos.")
             return
-    
-        # Add background music
-        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_final_video:
-            combined_video = temp_final_video.name
-            combined_video = add_BGM(music, final_video_with_audio, output_file=combined_video)
-        
-            st.write(f"Final video created: {combined_video}")
-            with open(combined_video, "rb") as combined_video_file:
-                combined_video_bytes = combined_video_file.read()
-                st.video(combined_video_bytes)
-    
+
+        # Add background music to the first combined video
+        final_video_with_bgm = os.path.join(temp_dir, "final_video_with_bgm.mp4")
+        add_BGM(music, combined_videos[0], output_file=final_video_with_bgm)
+
+        if os.path.exists(final_video_with_bgm):
+            st.write(f"Final video created: {final_video_with_bgm}")
+            # Display the final video in the app
+            with open(final_video_with_bgm, "rb") as video_file:
+                st.video(video_file)
+
+            # Allow users to download the final video
+            with open(final_video_with_bgm, "rb") as file:
+                st.download_button(
+                    label="Download Combined Video",
+                    data=file,
+                    file_name="final_video_with_bgm.mp4",
+                    mime="video/mp4"
+                )
+        else:
+            st.write("Failed to create the final video with background music.")
+
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
 
+    finally:
+        # Cleanup temporary files after the video is displayed
+        if st.button("Cleanup Temporary Files"):
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            st.info("Temporary files cleaned up.")
 
-    except Exception as e:
-        st.write(f"Error combining video and voice segments: {e}")
-
-    # Allow users to download the combined video
-    if os.path.exists(combined_video):
-        with open(combined_video, "rb") as file:
-            st.download_button(
-                label="Download Combined Video",
-                data=file,
-                file_name="combined_video.mp4",
-                mime="video/mp4"
-            )
 
 if __name__ == "__main__":
     main()
