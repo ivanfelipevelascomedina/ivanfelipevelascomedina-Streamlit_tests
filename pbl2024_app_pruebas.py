@@ -20,11 +20,9 @@ import subprocess
 import textwrap
 import streamlit as st
 from moviepy.config import change_settings
-import cv2
 import numpy as np
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_merge_video_audio
-import tempfile
 
 # Function to add music to a video
 def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
