@@ -62,7 +62,7 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
 #    return cvc.set_duration(clip.duration)
 
 # Function to combine video, voice and subtitles
-def combine_segments(video_files, voice_files, subtitles, output_file="final_video.mp4"):
+def combine_segments(video_files, voice_files, subtitles, output_file):
     try:
         clips = []
         video_clips = [VideoFileClip(video) for video in video_files]
@@ -159,6 +159,7 @@ def main():
     
     # Combine the segments
     try:
+        output_file="final_video.mp4"
         final_video = combine_segments(video_files_1, voice_files_1, narrators_1)
         ## Need to save the music somewhere
         final_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
@@ -169,6 +170,7 @@ def main():
     
     # Combine the segments
     try:
+        output_file="final_video_1.mp4"
         final_video_1 = combine_segments(video_files_1, voice_files_1, narrators_1)
         ## Need to save the music somewhere
         final_video_1 = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_1.mp4")
@@ -186,6 +188,7 @@ def main():
     ]
     narrators_2 = ["1","2"]
     try:
+        output_file="final_video_2.mp4"
         final_video_2 = combine_segments(video_files_2, voice_files_2, narrators_2)
         ## Need to save the music somewhere
         final_video_2 = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_2.mp4")
