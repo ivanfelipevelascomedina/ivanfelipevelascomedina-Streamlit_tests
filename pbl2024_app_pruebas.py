@@ -63,24 +63,23 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
 
 # Function to combine video, voice and subtitles
 def combine_segments(video_files, voice_files, subtitles):
-    clips = []
-    # Create VideoFileClip objects for the video files
-    video_clips = [VideoFileClip(video) for video in video_files]
+    try:
+        clips = []
+        video_clips = [VideoFileClip(video) for video in video_files]
+        for video_clip, audio, subtitle in zip(video_clips, voice_files, subtitles):
+            audio_clip = AudioFileClip(audio)
+            video_clip = video_clip.set_audio(audio_clip)
+            clips.append(video_clip)
 
-    # Combine video and audio
-    for video_clip, audio, subtitle in zip(video_clips, voice_files, subtitles):
-        audio_clip = AudioFileClip(audio)
-        video_clip = video_clip.set_audio(audio_clip)
-        #video_clip = annotate(video_clip, subtitle)
-        clips.append(video_clip)
-
-    # Concatenate video clips
-    combined_video = concatenate_videoclips(clips)
-
-    # Output file
-    output_file = "final_video.mp4"
-    combined_video.write_videofile(output_file, codec="libx264", audio_codec="aac")
-
+        combined_video = concatenate_videoclips(clips)
+        combined_video.write_videofile(output_file, codec="libx264", audio_codec="aac")
+        
+        # Log file creation step
+        st.write(f"Tried creating {output_file}")
+        st.write(f"File exists after creation: {os.path.exists(output_file)}")
+    except Exception as e:
+        st.write(f"Error in combine_segments: {e}")
+        
     return output_file
 
 
