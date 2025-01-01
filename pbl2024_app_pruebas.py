@@ -48,12 +48,43 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
 
     return output_file
 
+# Function to combine video, voice and subtitles
+def combine_segments(video_files, voice_files, subtitles):
+    clips = []
+    # Create VideoFileClip objects for the video files
+    video_clips = [VideoFileClip(video) for video in video_files]
+
+    # Combine video and audio
+    for video_clip, audio, subtitle in zip(video_clips, voice_files, subtitles):
+        audio_clip = AudioFileClip(audio)
+        video_clip = video_clip.set_audio(audio_clip)
+        video_clip = annotate(video_clip, subtitle)
+        clips.append(video_clip)
+
+    # Concatenate video clips
+    combined_video = concatenate_videoclips(clips)
+
+    # Output file
+    output_file = "final_video.mp4"
+    combined_video.write_videofile(output_file, codec="libx264", audio_codec="aac")
+
+    return output_file
+
 # Main program
 def main():
     
-    ## Dfine music and video
+    ## Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
+    video_files = [
+        "video_1.mp4", "video_2.mp4", "video_3.mp4",
+        "video_4.mp4", "video_5.mp4", "video_6.mp4"
+    ]
+    voice_files = [
+        "voice_1.mp3", "voice_2.mp3", "voice_3.mp3",
+        "voice_4.mp3", "voice_5.mp3", "voice_6.mp3"
+    ]
+    narrators = ["Welcome to the story.", "Once upon a time, in a distant land...", "This is how it begins.", "4", "5", "6"]
 
     # Display video
     video_file = open(video, "rb")
@@ -79,7 +110,7 @@ def main():
                 mime="video/mp4"
             )
 
-    # Combine the segments
+    # Combine the music and video segments
     try:
         ## Need to save the music somewhere
         music_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
@@ -92,12 +123,36 @@ def main():
         st.write(f"Error combining video and voice segments: {e}")
 
     # Allow users to download the music video
+
+    # Combine the text, music and video segments
     if os.path.exists(music_video):
         with open(music_video, "rb") as file:
             st.download_button(
-                label="Download Final Video",
+                label="Download Music Video",
                 data=file,
                 file_name="music_video.mp4",
+                mime="video/mp4"
+            )
+
+        try:
+        combined_video = combine_segments(video_files, voice_files, narrators)
+        ## Need to save the music somewhere
+        combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
+        st.write(f"Final video created: {combined_video}")
+        combined_video_file = open(combined_video, "rb")
+        combined_video_bytes = combined_video_file.read()
+        st.video(combined_video_bytes)  # Display the video in the app
+
+    except Exception as e:
+        st.write(f"Error combining video and voice segments: {e}")
+
+    # Allow users to download the music video
+    if os.path.exists(combined_video):
+        with open(combined_video, "rb") as file:
+            st.download_button(
+                label="Download Combined Video",
+                data=file,
+                file_name="combined_video.mp4",
                 mime="video/mp4"
             )
 
