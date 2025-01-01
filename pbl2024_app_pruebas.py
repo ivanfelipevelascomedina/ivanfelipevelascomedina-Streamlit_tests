@@ -26,10 +26,11 @@ from moviepy.config import change_settings
 # Main program
 def main():
     
-    ## Need to save the music somewhere
+    ## Dfine music and video
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
-    # Allow users to download the music
+    video = "final_video.mp4"
     
+    # Allow users to download the music
     if os.path.exists(music):
         with open(music, "rb") as file:
             st.download_button(
@@ -38,6 +39,9 @@ def main():
                 file_name="music.mp3",
                 mime="video/mp4"
             )
+
+    # Display video
+    st.video(final_video)  # Display the video in the app
 
 
 if __name__ == "__main__":
