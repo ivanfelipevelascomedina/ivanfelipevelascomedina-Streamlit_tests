@@ -158,17 +158,17 @@ def main():
 
     # Combine the segments
     try:
-        final_video = combine_segments(video_files, voice_files, narrators)
+        final_video_1 = combine_segments(video_files, voice_files, narrators)
         ## Need to save the music somewhere
-        final_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
-        st.write(f"Final video created: {final_video}")
-        st.video(final_video)  # Display the video in the app
+        final_video_1 = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_1.mp4")
+        st.write(f"Final video created: {final_video_1}")
+        st.video(final_video_1)  # Display the video in the app
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
 
     # Combine the segments
     video_files_2 = [
-        "video_1.mp4", "final_vide0.map4"
+        "video_1.mp4", "final_video_1.mp4"
     ]
     voice_files_2 = [
         "voice_1.mp3", "voice_2.mp3"
