@@ -9,7 +9,6 @@ from openai import OpenAI
 import requests
 import time
 import os
-os.system("apt-get update && apt-get install -y imagemagick")
 import re
 import random
 from lumaai import LumaAI
@@ -21,6 +20,7 @@ import subprocess
 import textwrap
 import streamlit as st
 from moviepy.config import change_settings
+change_settings({"IMAGEMAGICK_BINARY": "ImageMagick-7.1.1-Q16-HDRI\\magick.exe"})
 
 # Function to add music to a video
 def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
