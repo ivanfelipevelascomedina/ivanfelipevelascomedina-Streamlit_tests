@@ -156,6 +156,8 @@ def main():
     ]
     narrators_1 = ["Welcome to the story.", "Once upon a time, in a distant land..."]
 
+    st.write(f"Current working directory: {os.getcwd()}")
+    
     # Combine the segments
     try:
         final_video = combine_segments(video_files_1, voice_files_1, narrators_1)
