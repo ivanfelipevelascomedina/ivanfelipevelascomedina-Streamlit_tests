@@ -91,6 +91,16 @@ def main():
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
 
+    import subprocess
+
+    try:
+        result = subprocess.run(["convert", "-version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("ImageMagick is installed and working.")
+        print(result.stdout.decode())
+    except Exception as e:
+        print(f"ImageMagick is not working: {e}")
+
+    
 #    # Display video
 #    video_file = open(video, "rb")
 #    video_bytes = video_file.read()
