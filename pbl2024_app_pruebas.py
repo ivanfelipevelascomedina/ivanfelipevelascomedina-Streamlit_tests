@@ -149,14 +149,12 @@ def main():
 
 
     video_files = [
-        "video_1.mp4", "video_2.mp4", "video_3.mp4",
-        "video_4.mp4", "video_5.mp4", "video_6.mp4"
+        "video_1.mp4", "video_2.mp4",
     ]
     voice_files = [
-        "voice_1.mp3", "voice_2.mp3", "voice_3.mp3",
-        "voice_4.mp3", "voice_5.mp3", "voice_6.mp3"
+        "voice_1.mp3", "voice_2.mp3",
     ]
-    narrators = ["Welcome to the story.", "Once upon a time, in a distant land...", "This is how it begins.", "4", "5", "6"]
+    narrators = ["Welcome to the story.", "Once upon a time, in a distant land..."]
 
     # Combine the segments
     try:
@@ -170,16 +168,12 @@ def main():
 
     # Combine the segments
     video_files_2 = [
-        "video_1.mp4", "video_2.mp4", "video_3.mp4",
-        "video_4.mp4", "video_5.mp4", "video_6.mp4",
-        "final_vide0.map4"
+        "video_1.mp4", "final_vide0.map4"
     ]
     voice_files_2 = [
-        "voice_1.mp3", "voice_2.mp3", "voice_3.mp3",
-        "voice_4.mp3", "voice_5.mp3", "voice_6.mp3",
-        "voice_1"
+        "voice_1.mp3", "voice_2.mp3"
     ]
-    narrators_2 = ["Welcome to the story.", "Once upon a time, in a distant land...", "This is how it begins.", "4", "5", "6","7"]
+    narrators_2 = ["1","2"]
     try:
         final_video_2 = combine_segments(video_files_2, voice_files_2, narrators_2)
         ## Need to save the music somewhere
