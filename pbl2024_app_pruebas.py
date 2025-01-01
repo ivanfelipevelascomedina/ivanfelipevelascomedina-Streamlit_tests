@@ -149,10 +149,10 @@ def main():
 
 
     video_files_1 = [
-        "video_1.mp4", "video_2.mp4",
+        "video_4.mp4", "video_5.mp4",
     ]
     voice_files_1 = [
-        "voice_1.mp3", "voice_2.mp3",
+        "voice_4.mp3", "voice_5.mp3",
     ]
     narrators_1 = ["Welcome to the story.", "Once upon a time, in a distant land..."]
 
