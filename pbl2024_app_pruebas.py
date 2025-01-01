@@ -62,7 +62,7 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
 #    return cvc.set_duration(clip.duration)
 
 # Function to combine video, voice and subtitles
-def combine_segments(video_files, voice_files, subtitles):
+def combine_segments(video_files, voice_files, subtitles, output_file="final_video.mp4"):
     try:
         clips = []
         video_clips = [VideoFileClip(video) for video in video_files]
@@ -76,10 +76,12 @@ def combine_segments(video_files, voice_files, subtitles):
         
         # Log file creation step
         st.write(f"Tried creating {output_file}")
-        st.write(f"File exists after creation: {os.path.exists(output_file)}")
+        absolute_path = os.path.abspath(output_file)
+        st.write(f"Absolute path: {absolute_path}")
+        st.write(f"File exists after creation: {os.path.exists(absolute_path)}")
     except Exception as e:
         st.write(f"Error in combine_segments: {e}")
-        
+
     return output_file
 
 
