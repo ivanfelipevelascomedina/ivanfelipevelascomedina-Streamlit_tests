@@ -134,8 +134,6 @@ def main():
         st.write(f"Error combining video and voice segments: {e}")
 
     # Allow users to download the music video
-
-    # Combine the text, music and video segments
     if os.path.exists(music_video):
         with open(music_video, "rb") as file:
             st.download_button(
@@ -145,7 +143,8 @@ def main():
                 mime="video/mp4"
             )
 
-        try:
+    # Combine the text, music and video segments
+    try:
         combined_video = combine_segments(video_files, voice_files, narrators)
         ## Need to save the music somewhere
         combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
@@ -157,7 +156,7 @@ def main():
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
 
-    # Allow users to download the music video
+    # Allow users to download the combined video
     if os.path.exists(combined_video):
         with open(combined_video, "rb") as file:
             st.download_button(
