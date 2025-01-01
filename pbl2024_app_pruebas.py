@@ -52,43 +52,18 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
 
     return output_file
 
-# Function to add subtitles using OpenCV
-def annotate_frame(frame, text, position=(50, 50), font_scale=1, color=(255, 255, 255), thickness=2):
-    font = cv2.FONT_HERSHEY_SIMPLEX
-    wrapped_text = text.split('\n')  # Split text into lines for wrapping
-    y_offset = position[1]
-    for line in wrapped_text:
-        cv2.putText(frame, line, (position[0], y_offset), font, font_scale, color, thickness, lineType=cv2.LINE_AA)
-        y_offset += 30  # Line spacing
-    return frame
+# Function to combine videos
+def combine_videos(video_paths):
+    """
+    Combines a list of videos into one video and saves it as a temporary file.
+    """
+    clips = [VideoFileClip(video) for video in video_paths]
+    combined_clip = concatenate_videoclips(clips, method="compose")
 
-# Function to create temporary directories for video processing
-def create_temp_dir():
-    return tempfile.mkdtemp(suffix=None, prefix="SMW_", dir=None)
-
-# Function to process videos with subtitles and output to temporary files
-def process_videos_with_subtitles(video_files, subtitles, temp_dir):
-    processed_videos = []
-    for i, (video, subtitle) in enumerate(zip(video_files, subtitles)):
-        subtitle_file = os.path.join(temp_dir, f"processed_video_{i}.mp4")
-        process_video_with_subtitles(video, [subtitle], subtitle_file)
-        if os.path.exists(subtitle_file):
-            processed_videos.append(subtitle_file)
-        else:
-            st.write(f"Subtitle video creation failed for {subtitle_file}")
-    return processed_videos
-
-# Function to combine video and audio files
-def combine_videos_and_audio(processed_videos, voice_files, temp_dir):
-    combined_videos = []
-    for i, (video, audio) in enumerate(zip(processed_videos, voice_files)):
-        combined_file = os.path.join(temp_dir, f"combined_video_{i}.mp4")
-        combine_video_and_audio(video, audio, combined_file)
-        if os.path.exists(combined_file):
-            combined_videos.append(combined_file)
-        else:
-            st.write(f"Failed to create combined video for {combined_file}")
-    return combined_videos
+    # Save to a temporary file
+    temp_file = tempfile.NamedTemporaryFile(suffix=".mp4", delete=False)
+    combined_clip.write_videofile(temp_file.name, codec="libx264", audio_codec="aac")
+    return temp_file.name
 
 # Main program
 def main():
@@ -96,15 +71,15 @@ def main():
     # Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
-    video_files = [
-        "video_1.mp4", "video_2.mp4", "video_3.mp4",
-        "video_4.mp4", "video_5.mp4", "video_6.mp4"
-    ]
-    voice_files = [
-        "voice_1.mp3", "voice_2.mp3", "voice_3.mp3",
-        "voice_4.mp3", "voice_5.mp3", "voice_6.mp3"
-    ]
-    narrators = ["Welcome to the story.", "Once upon a time, in a distant land...", "This is how it begins.", "4", "5", "6"]
+    #video_files = [
+    #    "video_1.mp4", "video_2.mp4", "video_3.mp4",
+    #    "video_4.mp4", "video_5.mp4", "video_6.mp4"
+    #]
+    #voice_files = [
+    #    "voice_1.mp3", "voice_2.mp3", "voice_3.mp3",
+    #    "voice_4.mp3", "voice_5.mp3", "voice_6.mp3"
+    #]
+    #narrators = ["Welcome to the story.", "Once upon a time, in a distant land...", "This is how it begins.", "4", "5", "6"]
 
     # Display video
     video_file = open(video, "rb")
@@ -152,52 +127,24 @@ def main():
                 mime="video/mp4"
             )
 
+    # Simulate videos as input
+    video_1 = "video_1.mp4"
+    video_2 = "video_2.mp4"
+    video_3 = "video_3.mp4"
 
-    # Create a temporary directory
-    temp_dir = create_temp_dir()
+    # Combine video_1 and video_2 into video_12
+    st.write("Combining video_1 and video_2 into video_12...")
+    video_12 = combine_videos([video_1, video_2])
+    st.write("video_12 created.")
+    with open(video_12, "rb") as file:
+        st.video(file.read())
 
-    try:
-        # Process videos with subtitles
-        processed_videos = process_videos_with_subtitles(video_files, narrators, temp_dir)
-        if not processed_videos:
-            st.write("No processed videos available.")
-            return
-
-        # Combine videos and audio
-        combined_videos = combine_videos_and_audio(processed_videos, voice_files, temp_dir)
-        if not combined_videos:
-            st.write("Failed to create combined videos.")
-            return
-
-        # Add background music to the first combined video
-        final_video_with_bgm = os.path.join(temp_dir, "final_video_with_bgm.mp4")
-        add_BGM(music, combined_videos[0], output_file=final_video_with_bgm)
-
-        if os.path.exists(final_video_with_bgm):
-            st.write(f"Final video created: {final_video_with_bgm}")
-            # Display the final video in the app
-            with open(final_video_with_bgm, "rb") as video_file:
-                st.video(video_file)
-
-            # Allow users to download the final video
-            with open(final_video_with_bgm, "rb") as file:
-                st.download_button(
-                    label="Download Combined Video",
-                    data=file,
-                    file_name="final_video_with_bgm.mp4",
-                    mime="video/mp4"
-                )
-        else:
-            st.write("Failed to create the final video with background music.")
-
-    except Exception as e:
-        st.write(f"Error combining video and voice segments: {e}")
-
-    finally:
-        # Cleanup temporary files after the video is displayed
-        if st.button("Cleanup Temporary Files"):
-            shutil.rmtree(temp_dir, ignore_errors=True)
-            st.info("Temporary files cleaned up.")
+    # Combine video_12 and video_3 into video_123
+    st.write("Combining video_12 and video_3 into video_123...")
+    video_123 = combine_videos([video_12, video_3])
+    st.write("video_123 created.")
+    with open(video_123, "rb") as file:
+        st.video(file.read())
 
 
 if __name__ == "__main__":
