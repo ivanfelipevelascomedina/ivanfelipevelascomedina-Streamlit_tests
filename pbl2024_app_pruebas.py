@@ -153,7 +153,7 @@ def main():
     # Combine the text, music and video segments
     try:
         processed_videos = []
-        for i, (video, audio, subtitle) in enumerate(zip(video_files, audio_files, subtitles)):
+        for i, (video, audio, subtitle) in enumerate(zip(video_files, voice_files, narrators)):
             subtitle_file = f"processed_video_{i}.mp4"
             process_video_with_subtitles(video, [subtitle], subtitle_file)
             processed_videos.append(subtitle_file)
