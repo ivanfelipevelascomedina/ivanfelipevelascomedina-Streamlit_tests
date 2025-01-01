@@ -155,14 +155,6 @@ def main():
         "voice_4.mp3", "voice_5.mp3",
     ]
     narrators_1 = ["Welcome to the story.", "Once upon a time, in a distant land..."]
-
-    st.write(f"Current working directory: {os.getcwd()}")
-    st.write(f"Absolute path for 'final_video.mp4': {os.path.abspath('final_video.mp4')}")
-    st.write(f"Does 'final_video.mp4' exist? {os.path.exists('final_video.mp4')}")
-    
-    st.write(f"Absolute path for 'final_video_1.mp4': {os.path.abspath('final_video_1.mp4')}")
-    st.write(f"Does 'final_video_1.mp4' exist? {os.path.exists('final_video_1.mp4')}")
-
     
     # Combine the segments
     try:
@@ -183,6 +175,13 @@ def main():
         st.video(final_video_1)  # Display the video in the app
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
+
+    st.write(f"Current working directory: {os.getcwd()}")
+    st.write(f"Absolute path for 'final_video.mp4': {os.path.abspath('final_video.mp4')}")
+    st.write(f"Does 'final_video.mp4' exist? {os.path.exists('final_video.mp4')}")
+    
+    st.write(f"Absolute path for 'final_video_1.mp4': {os.path.abspath('final_video_1.mp4')}")
+    st.write(f"Does 'final_video_1.mp4' exist? {os.path.exists('final_video_1.mp4')}")
 
     # Combine the segments
     video_files_2 = [
