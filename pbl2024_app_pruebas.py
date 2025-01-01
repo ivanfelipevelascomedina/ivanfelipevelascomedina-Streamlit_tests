@@ -83,8 +83,7 @@ def combine_segments(video_files, voice_files, subtitles):
 # Main program
 def main():
     # Specify the path to ImageMagick binary
-    imagemagick_path = os.path.join("ImageMagick-7.1.1-Q16-HDRI", "magick.exe")
-    change_settings({"IMAGEMAGICK_BINARY": imagemagick_path})
+    change_settings({"IMAGEMAGICK_BINARY": "magick.exe"})
     
     ## Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
