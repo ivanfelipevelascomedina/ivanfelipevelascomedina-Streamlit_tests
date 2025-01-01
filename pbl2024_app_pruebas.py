@@ -110,7 +110,7 @@ def main():
     video_file = open(video, "rb")
     video_bytes = video_file.read()
     st.video(video_bytes)  # Display the video in the app
-"""
+
     # Allow users to download the music
     if os.path.exists(music):
         with open(music, "rb") as file:
@@ -151,7 +151,7 @@ def main():
                 file_name="music_video.mp4",
                 mime="video/mp4"
             )
-"""
+
 
     # Create a temporary directory
     temp_dir = create_temp_dir()
@@ -202,3 +202,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
