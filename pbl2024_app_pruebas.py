@@ -41,7 +41,9 @@ def main():
             )
 
     # Display video
-    st.video(final_video)  # Display the video in the app
+    video_file = open(video, "rb")
+    video_bytes = video_file.read()
+    st.video(video_bytes)  # Display the video in the app
 
 
 if __name__ == "__main__":
