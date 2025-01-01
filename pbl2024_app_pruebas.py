@@ -92,53 +92,53 @@ def main():
     # Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
-"""
-    # Display video
-    video_file = open(video, "rb")
-    video_bytes = video_file.read()
-    st.video(video_bytes)  # Display the video in the app
 
-    # Allow users to download the music
-    if os.path.exists(music):
-        with open(music, "rb") as file:
-            st.download_button(
-                label="Download Final Song",
-                data=file,
-                file_name="music.mp3",
-                mime="video/mp4"
+#    # Display video
+#    video_file = open(video, "rb")
+#    video_bytes = video_file.read()
+#    st.video(video_bytes)  # Display the video in the app
+#
+#    # Allow users to download the music
+#    if os.path.exists(music):
+#        with open(music, "rb") as file:
+#            st.download_button(
+#                label="Download Final Song",
+#                data=file,
+#                file_name="music.mp3",
+#                mime="video/mp4"
+#            )
+#    # Allow users to download the video
+#    if os.path.exists(video):
+#        with open(video, "rb") as file:
+#            st.download_button(
+#                label="Download Final Video",
+#                data=file,
+#                file_name="video.mp4",
+#                mime="video/mp4"
+#            )
+#
+#    # Combine the music and video segments
+#    try:
+#        ## Need to save the music somewhere
+#        music_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
+#        st.write(f"Final video created: {music_video}")
+#        music_video_file = open(music_video, "rb")
+#        music_video_bytes = music_video_file.read()
+#        st.video(music_video_bytes)  # Display the video in the app
+#
+#    except Exception as e:
+#        st.write(f"Error combining video and voice segments: {e}")
+#
+#    # Allow users to download the music video
+#    if os.path.exists(music_video):
+#        with open(music_video, "rb") as file:
+#            st.download_button(
+#                label="Download Music Video",
+#                data=file,
+#                file_name="music_video.mp4",
+#                mime="video/mp4"
             )
-    # Allow users to download the video
-    if os.path.exists(video):
-        with open(video, "rb") as file:
-            st.download_button(
-                label="Download Final Video",
-                data=file,
-                file_name="video.mp4",
-                mime="video/mp4"
-            )
 
-    # Combine the music and video segments
-    try:
-        ## Need to save the music somewhere
-        music_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
-        st.write(f"Final video created: {music_video}")
-        music_video_file = open(music_video, "rb")
-        music_video_bytes = music_video_file.read()
-        st.video(music_video_bytes)  # Display the video in the app
-
-    except Exception as e:
-        st.write(f"Error combining video and voice segments: {e}")
-
-    # Allow users to download the music video
-    if os.path.exists(music_video):
-        with open(music_video, "rb") as file:
-            st.download_button(
-                label="Download Music Video",
-                data=file,
-                file_name="music_video.mp4",
-                mime="video/mp4"
-            )
-"""
 
     video_files = [
         "video_1.mp4", "video_2.mp4", "video_3.mp4",
