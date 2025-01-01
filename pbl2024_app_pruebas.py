@@ -88,7 +88,7 @@ def combine_segments(video_files, voice_files, subtitles):
 
 # Main program
 def main():
-   
+    st.write("HOLA")
     # Define music, video and subtitles
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
