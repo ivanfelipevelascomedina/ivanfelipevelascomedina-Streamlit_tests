@@ -51,15 +51,15 @@ def add_BGM(music, video, music_volume=0.3, output_file="final_video_BGM.mp4"):
     return output_file
 
 # Function to add subtitles
-def annotate(clip, txt, txt_color='white', fontsize=50, font='Helvetica-Bold', max_width=1):
-    max_width_px = clip.size[0] * max_width
-    # Wrap the text into multiple lines based on the max width
-    wrapped_text = textwrap.fill(txt, width=50)  # 50 characters per line as an example, adjust based on actual font
-    txtclip = editor.TextClip(wrapped_text, fontsize=fontsize, font=font, color=txt_color, stroke_color='black', stroke_width=1)
-    # Composite the text on top of the video clip
-    cvc = editor.CompositeVideoClip([clip, txtclip.set_pos(('center', 'bottom'))])
-
-    return cvc.set_duration(clip.duration)
+#def annotate(clip, txt, txt_color='white', fontsize=50, font='Helvetica-Bold', max_width=1):
+#    max_width_px = clip.size[0] * max_width
+#    # Wrap the text into multiple lines based on the max width
+#    wrapped_text = textwrap.fill(txt, width=50)  # 50 characters per line as an example, adjust based on actual font
+#    txtclip = editor.TextClip(wrapped_text, fontsize=fontsize, font=font, color=txt_color, stroke_color='black', stroke_width=1)
+#    # Composite the text on top of the video clip
+#    cvc = editor.CompositeVideoClip([clip, txtclip.set_pos(('center', 'bottom'))])
+#
+#    return cvc.set_duration(clip.duration)
 
 # Function to combine video, voice and subtitles
 def combine_segments(video_files, voice_files, subtitles):
@@ -71,7 +71,7 @@ def combine_segments(video_files, voice_files, subtitles):
     for video_clip, audio, subtitle in zip(video_clips, voice_files, subtitles):
         audio_clip = AudioFileClip(audio)
         video_clip = video_clip.set_audio(audio_clip)
-        video_clip = annotate(video_clip, subtitle)
+        #video_clip = annotate(video_clip, subtitle)
         clips.append(video_clip)
 
     # Concatenate video clips
