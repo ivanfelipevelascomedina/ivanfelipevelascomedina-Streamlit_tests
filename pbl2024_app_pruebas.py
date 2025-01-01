@@ -81,24 +81,23 @@ def main():
 
     # Combine the segments
     try:
-        final_video = combine_segments(video_files, voice_files, narrators)
         ## Need to save the music somewhere
-        final_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
+        music_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
         st.write(f"Final video created: {final_video}")
-        final_video_file = open(final_video, "rb")
-        final_video_bytes = final_video_file.read()
-        st.video(final_video_bytes)  # Display the video in the app
+        music_video_file = open(music_video, "rb")
+        music_video_bytes = music_video_file.read()
+        st.video(music_video_bytes)  # Display the video in the app
 
     except Exception as e:
         st.write(f"Error combining video and voice segments: {e}")
 
     # Allow users to download the final video
-    if os.path.exists(final_video):
-        with open(final_video, "rb") as file:
+    if os.path.exists(music_video):
+        with open(music_video, "rb") as file:
             st.download_button(
                 label="Download Final Video",
                 data=file,
-                file_name="final_video.mp4",
+                file_name="music_video.mp4",
                 mime="video/mp4"
             )
 
