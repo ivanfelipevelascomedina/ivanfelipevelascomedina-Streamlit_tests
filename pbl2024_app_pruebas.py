@@ -95,10 +95,10 @@ def main():
 
     try:
         result = subprocess.run(["convert", "-version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print("ImageMagick is installed and working.")
-        print(result.stdout.decode())
+        st.write("ImageMagick is installed and working.")
+        st.write(result.stdout.decode())
     except Exception as e:
-        print(f"ImageMagick is not working: {e}")
+        st.write(f"ImageMagick is not working: {e}")
 
     
 #    # Display video
