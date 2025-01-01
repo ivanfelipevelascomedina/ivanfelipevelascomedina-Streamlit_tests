@@ -29,7 +29,12 @@ def main():
     ## Dfine music and video
     music = "bollywoodkollywood-sad-love-bgm-13349.mp3"
     video = "final_video.mp4"
-    
+
+    # Display video
+    video_file = open(video, "rb")
+    video_bytes = video_file.read()
+    st.video(video_bytes)  # Display the video in the app
+
     # Allow users to download the music
     if os.path.exists(music):
         with open(music, "rb") as file:
@@ -39,11 +44,15 @@ def main():
                 file_name="music.mp3",
                 mime="video/mp4"
             )
-
-    # Display video
-    video_file = open(video, "rb")
-    video_bytes = video_file.read()
-    st.video(video_bytes)  # Display the video in the app
+    # Allow users to download the video
+    if os.path.exists(video):
+        with open(video, "rb") as file:
+            st.download_button(
+                label="Download Final Video",
+                data=file,
+                file_name="video.mp4",
+                mime="video/mp4"
+            )
 
 
 if __name__ == "__main__":
