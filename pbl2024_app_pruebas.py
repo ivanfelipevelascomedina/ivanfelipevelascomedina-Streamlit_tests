@@ -160,7 +160,7 @@ def main():
     # Combine the segments
     try:
         output_file="final_video.mp4"
-        final_video = combine_segments(video_files_1, voice_files_1, narrators_1)
+        final_video = combine_segments(video_files_1, voice_files_1, narrators_1, output_file)
         ## Need to save the music somewhere
         final_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
         st.write(f"Final video created: {final_video}")
@@ -171,7 +171,7 @@ def main():
     # Combine the segments
     try:
         output_file="final_video_1.mp4"
-        final_video_1 = combine_segments(video_files_1, voice_files_1, narrators_1)
+        final_video_1 = combine_segments(video_files_1, voice_files_1, narrators_1, output_file)
         ## Need to save the music somewhere
         final_video_1 = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_1.mp4")
         st.write(f"Final video 1 created: {final_video_1}")
@@ -189,7 +189,7 @@ def main():
     narrators_2 = ["1","2"]
     try:
         output_file="final_video_2.mp4"
-        final_video_2 = combine_segments(video_files_2, voice_files_2, narrators_2)
+        final_video_2 = combine_segments(video_files_2, voice_files_2, narrators_2, output_file)
         ## Need to save the music somewhere
         final_video_2 = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_2.mp4")
         st.write(f"Final video 2 created: {final_video_2}")
