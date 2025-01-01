@@ -165,14 +165,14 @@ def main():
             st.write("No processed videos available.")
             return
         # Combine video and audio
-        final_video = "final_video_with_audio.mp4"
-        combine_video_and_audio(processed_videos[0], voice_files[0], final_video)
-        if not os.path.exists(final_video):
+        final_video_with_audio = "final_video_with_audio.mp4"
+        combine_video_and_audio(processed_videos[0], voice_files[0], final_video_with_audio)
+        if not os.path.exists(final_video_with_audio):
             st.write("Failed to create the combined video with audio.")
             return
             
         ## Need to save the music somewhere
-        combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video.mp4")
+        combined_video = add_BGM("bollywoodkollywood-sad-love-bgm-13349.mp3", "final_video_with_audio.mp4")
         st.write(f"Final video created: {combined_video}")
         combined_video_file = open(combined_video, "rb")
         combined_video_bytes = combined_video_file.read()
